@@ -4,8 +4,8 @@
             <!-- Navigation -->
             <template #header>
                 <Navigation
-                    :active-count="activeCount"
-                    :completed-count="completedCount"
+                    :active-count="store.activeCount"
+                    :completed-count="store.completedCount"
                 />
             </template>
 
@@ -17,8 +17,8 @@
             <!-- Footer -->
             <template #footer>
                 <Footer
-                    :total-count="todosCount"
-                    :completed-count="completedCount"
+                    :total-count="store.todosCount"
+                    :completed-count="store.completedCount"
                     @clear-completed="handleClearCompleted"
                 />
             </template>
@@ -39,11 +39,10 @@ const { initTheme } = useTheme();
 initTheme();
 
 // Todo state
-const { todosCount, activeCount, completedCount, clearCompleted } =
-    useTodoStore();
+const store = useTodoStore();
 
 const handleClearCompleted = async () => {
-    await clearCompleted();
+    await store.clearCompleted();
 };
 </script>
 

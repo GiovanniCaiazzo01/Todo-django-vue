@@ -1,142 +1,121 @@
-import { ref, computed } from "vue";
 import { TodoService } from "@/services/api";
-import type { Todo, CreateTodoData, UpdateTodoData } from "@/types";
+import type { CreateTodoData, Todo, UpdateTodoData } from "@/types";
+import { defineStore } from "pinia";
 
-// Global state
-const todos = ref<Todo[]>([]);
-const isLoading = ref(false);
-const error = ref<string | null>(null);
-
-// Computed properties
-const completedTodos = computed(() =>
-  todos.value.filter((todo) => todo.completed),
-);
-const activeTodos = computed(() =>
-  todos.value.filter((todo) => !todo.completed),
-);
-const todosCount = computed(() => todos.value.length);
-const completedCount = computed(() => completedTodos.value.length);
-const activeCount = computed(() => activeTodos.value.length);
-
-// Actions
-const loadTodos = async () => {
-  try {
-    isLoading.value = true;
-    error.value = null;
-    const response = await TodoService.getAll();
-    todos.value = response.results;
-  } catch (err: any) {
-    error.value = err.response?.data?.detail || "Failed to load todos";
-    console.error("Error loading todos:", err);
-  } finally {
-    isLoading.value = false;
-  }
+type UseTodoStore = {
+  todos: Todo[];
+  isLoading: boolean;
+  error: string | null;
 };
 
-const createTodo = async (data: CreateTodoData) => {
-  try {
-    error.value = null;
-    const newTodo = await TodoService.create(data);
-    todos.value.unshift(newTodo); // Add to beginning of list
-    return newTodo;
-  } catch (err: any) {
-    error.value = err.response?.data?.detail || "Failed to create todo";
-    console.error("Error creating todo:", err);
-    throw err;
-  }
-};
+export const useTodoStore = defineStore("todo", {
+  state: (): UseTodoStore => ({ todos: [], isLoading: false, error: null }),
+  getters: {
+    completedTodos: (state) => state.todos.filter((todo) => todo.completed),
+    activeTodos: (state) => state.todos.filter((todo) => !todo.completed),
+    todosCount: (state) => state.todos.length,
+    completedCount(): number {
+      return this.completedTodos.length;
+    },
+    activeCount(): number {
+      return this.activeTodos.length;
+    },
+  },
+  actions: {
+    async loadTodos() {
+      try {
+        this.isLoading = true;
+        this.error = null;
+        const response = await TodoService.getAll();
+        this.todos = response.results;
+      } catch (err: any) {
+        this.error = err.response?.data?.detail || "Failed to load todos";
+        console.error("Error loading todos:", err);
+      } finally {
+        this.isLoading = false;
+      }
+    },
 
-const updateTodo = async (id: number, data: UpdateTodoData) => {
-  try {
-    error.value = null;
-    const updatedTodo = await TodoService.update(id, data);
-    const index = todos.value.findIndex((todo) => todo.id === id);
-    if (index !== -1) {
-      todos.value[index] = updatedTodo;
-    }
-    return updatedTodo;
-  } catch (err: any) {
-    error.value = err.response?.data?.detail || "Failed to update todo";
-    console.error("Error updating todo:", err);
-    throw err;
-  }
-};
+    async createTodo(data: CreateTodoData) {
+      try {
+        this.error = null;
+        const newTodo = await TodoService.create(data);
+        this.todos.unshift(newTodo); // Add to beginning of list
+        return newTodo;
+      } catch (err: any) {
+        this.error = err.response?.data?.detail || "Failed to create todo";
+        console.error("Error creating todo:", err);
+        throw err;
+      }
+    },
 
-const deleteTodo = async (id: number) => {
-  try {
-    error.value = null;
-    await TodoService.delete(id);
-    todos.value = todos.value.filter((todo) => todo.id !== id);
-  } catch (err: any) {
-    error.value = err.response?.data?.detail || "Failed to delete todo";
-    console.error("Error deleting todo:", err);
-    throw err;
-  }
-};
+    async updateTodo(id: number, data: UpdateTodoData) {
+      try {
+        this.error = null;
+        const updatedTodo = await TodoService.update(id, data);
+        const index = this.todos.findIndex((todo) => todo.id === id);
+        if (index !== -1) {
+          this.todos[index] = updatedTodo;
+        }
+        return updatedTodo;
+      } catch (err: any) {
+        this.error = err.response?.data?.detail || "Failed to update todo";
+        console.error("Error updating todo:", err);
+        throw err;
+      }
+    },
 
-const toggleTodo = async (id: number) => {
-  const todo = todos.value.find((t) => t.id === id);
-  if (!todo) {
-    console.error("Todo not found with ID:", id);
-    return;
-  }
+    async deleteTodo(id: number) {
+      try {
+        this.error = null;
+        await TodoService.delete(id);
+        this.todos = this.todos.filter((todo) => todo.id !== id);
+      } catch (err: any) {
+        this.error = err.response?.data?.detail || "Failed to delete todo";
+        console.error("Error deleting todo:", err);
+        throw err;
+      }
+    },
+    async toggleTodo(id: number) {
+      const todo = this.todos.find((t) => t.id === id);
+      if (!todo) {
+        console.error("Todo not found with ID:", id);
+        return;
+      }
 
-  try {
-    error.value = null;
-    const updatedTodo = await TodoService.toggleComplete(id, !todo.completed);
-    const index = todos.value.findIndex((t) => t.id === id);
-    if (index !== -1) {
-      todos.value[index].completed = updatedTodo.completed;
-    }
-    return updatedTodo;
-  } catch (err: any) {
-    error.value = err.response?.data?.detail || "Failed to toggle todo";
-    console.error("Error toggling todo:", err);
-    throw err;
-  }
-};
+      try {
+        this.error = null;
+        const updatedTodo = await TodoService.toggleComplete(
+          id,
+          !todo.completed,
+        );
+        const index = this.todos.findIndex((t) => t.id === id);
+        if (index !== -1) {
+          this.todos[index].completed = updatedTodo.completed;
+        }
+        return updatedTodo;
+      } catch (err: any) {
+        this.error = err.response?.data?.detail || "Failed to toggle todo";
+        console.error("Error toggling todo:", err);
+        throw err;
+      }
+    },
+    async clearCompleted() {
+      const completedIds = this.completedTodos.map((todo) => todo.id);
 
-const clearCompleted = async () => {
-  const completedIds = completedTodos.value.map((todo) => todo.id);
-
-  try {
-    error.value = null;
-    await Promise.all(completedIds.map((id) => TodoService.delete(id)));
-    todos.value = todos.value.filter((todo) => !todo.completed);
-  } catch (err: any) {
-    error.value =
-      err.response?.data?.detail || "Failed to clear completed todos";
-    console.error("Error clearing completed todos:", err);
-    throw err;
-  }
-};
-
-const clearError = () => {
-  error.value = null;
-};
-
-// Export the store
-export function useTodoStore() {
-  return {
-    // State
-    todos,
-    isLoading,
-    error,
-
-    // Computed
-    completedTodos,
-    activeTodos,
-    todosCount,
-    completedCount,
-    activeCount,
-
-    // Actions
-    loadTodos,
-    createTodo,
-    updateTodo,
-    deleteTodo,
-    toggleTodo,
-    clearCompleted,
-    clearError,
-  };
-}
+      try {
+        this.error = null;
+        await Promise.all(completedIds.map((id) => TodoService.delete(id)));
+        this.todos = this.todos.filter((todo) => !todo.completed);
+      } catch (err: any) {
+        this.error =
+          err.response?.data?.detail || "Failed to clear completed todos";
+        console.error("Error clearing completed todos:", err);
+        throw err;
+      }
+    },
+    clearError() {
+      this.error = null;
+    },
+  },
+});

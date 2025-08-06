@@ -17,7 +17,7 @@
         <!-- Todo List -->
         <ul class="space-y-3">
             <li
-                v-for="todo in todos"
+                v-for="todo in store.todos"
                 :key="todo.id"
                 class="card flex justify-between p-4"
             >
@@ -45,7 +45,7 @@
         </ul>
 
         <!-- Loading spinner -->
-        <div v-if="isLoading" class="mt-4 flex justify-center">
+        <div v-if="store.isLoading" class="mt-4 flex justify-center">
             <div class="loading w-6 h-6"></div>
         </div>
     </div>
@@ -53,30 +53,28 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useTodoStore } from "@/stores/todoStore";
 import type { Todo } from "@/types";
+import { useTodoStore } from "@/stores/todoStore";
 
-const { todos, isLoading, loadTodos, createTodo, deleteTodo, toggleTodo } =
-    useTodoStore();
-
+const store = useTodoStore();
 const formData = ref({ title: "" });
 
-onMounted(loadTodos);
+onMounted(store.loadTodos);
 
 const handleCreate = async () => {
     if (!formData.value.title) return;
-    await createTodo({
+    await store.createTodo({
         title: formData.value.title,
     });
     formData.value.title = "";
 };
 
 const toggle = async (todo: Todo) => {
-    await toggleTodo(todo.id);
+    await store.toggleTodo(todo.id);
 };
 
 const remove = async (todo: Todo) => {
-    await deleteTodo(todo.id);
+    await store.deleteTodo(todo.id);
 };
 </script>
 

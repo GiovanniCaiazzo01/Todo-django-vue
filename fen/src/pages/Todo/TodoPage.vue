@@ -3,7 +3,9 @@
         <div class="container mx-auto">
             <!-- Header -->
             <div class="text-center py-8">
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                <h2
+                    class="text-3xl font-bold text-gray-900 dark:text-white mb-2"
+                >
                     My Todo List
                 </h2>
                 <p class="text-gray-600 dark:text-gray-400">
@@ -12,27 +14,25 @@
             </div>
 
             <!-- Error Display -->
-           <ErrorState :error :clearError/>
+            <ErrorState :error="store.error" :clear-error="store.clearError" />
             <!-- Todo List -->
             <TodoList />
 
             <!-- Empty State -->
-            <EmptyState :isLoading :todosCount />
-            </div>
+            <EmptyState
+                :is-loading="store.isLoading"
+                :todos-count="store.todosCount"
+            />
+        </div>
     </main>
 </template>
 
 <script setup lang="ts">
-import { useTodoStore } from '@/stores/todoStore'
-import TodoList from './components/TodoList.vue';
-import EmptyState from './components/EmptyState.vue';
-import ErrorState from './components/ErrorState.vue';
+import { useTodoStore } from "@/stores/todoStore";
+import TodoList from "./components/TodoList.vue";
+import EmptyState from "./components/EmptyState.vue";
+import ErrorState from "./components/ErrorState.vue";
 
 // Todo state
-const {
-  isLoading,
-  error,
-  todosCount,
-  clearError,
-} = useTodoStore()
+const store = useTodoStore();
 </script>

@@ -38,12 +38,12 @@
 import { Sun, Moon } from 'lucide-vue-next'
 import { useTheme } from '@/composables/useTheme'
 
-interface Props {
+interface NavigationProps {
   activeCount?: number
   completedCount?: number
 }
 
-withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<NavigationProps>(), {
   activeCount: 0,
   completedCount: 0,
 })

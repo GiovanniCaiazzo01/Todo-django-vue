@@ -12,42 +12,21 @@
             </div>
 
             <!-- Error Display -->
-            <div v-if="error" class="max-w-7xl mx-auto px-6 mb-4">
-                <div
-                    class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg">
-                    <div class="flex justify-between items-center">
-                        <span>{{ error }}</span>
-                        <button @click="clearError"
-                            class="text-red-700 dark:text-red-400 hover:text-red-900 dark:hover:text-red-200">
-                            <X class="w-4 h-4" />
-                        </button>
-                    </div>
-                </div>
-            </div>
-
+           <ErrorState :error :clearError/>
             <!-- Todo List -->
             <TodoList />
 
             <!-- Empty State -->
-            <div v-if="!isLoading && todosCount === 0" class="text-center py-12">
-                <div class="text-gray-400 dark:text-gray-600 mb-4">
-                    <CheckCircle class="w-16 h-16 mx-auto mb-4 opacity-50" />
-                </div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    No todos yet
-                </h3>
-                <p class="text-gray-600 dark:text-gray-400">
-                    Add your first todo above to get started!
-                </p>
+            <EmptyState :isLoading :todosCount />
             </div>
-        </div>
     </main>
 </template>
 
 <script setup lang="ts">
-import { CheckCircle, X } from 'lucide-vue-next'
 import { useTodoStore } from '@/stores/todoStore'
-import TodoList from '@/components/TodoList.vue';
+import TodoList from './components/TodoList.vue';
+import EmptyState from './components/EmptyState.vue';
+import ErrorState from './components/ErrorState.vue';
 
 // Todo state
 const {

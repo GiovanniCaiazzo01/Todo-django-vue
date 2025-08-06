@@ -53,7 +53,6 @@ const {
   createTodo,
   deleteTodo,
   toggleTodo,
-  clearCompleted,
 } = useTodoStore()
 
 const formData = ref({ title: '' })

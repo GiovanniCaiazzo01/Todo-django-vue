@@ -46,7 +46,7 @@ export class TodoService {
     await api.delete(`${this.ENDPOINT}${id}/`)
   }
 
-  static async toggleComplete(id: number, completed: boolean): Promise<Todo> {
+  static async toggleComplete(id: number, completed: boolean): Promise<Pick<Todo, "completed" | "description" | "title" >> {
     return this.update(id, { completed })
   }
 }

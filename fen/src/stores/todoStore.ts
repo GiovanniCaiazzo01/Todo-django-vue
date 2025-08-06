@@ -82,7 +82,7 @@ const toggleTodo = async (id: number) => {
     const updatedTodo = await TodoService.toggleComplete(id, !todo.completed)
     const index = todos.value.findIndex(t => t.id === id)
     if (index !== -1) {
-      todos.value[index] = updatedTodo
+      todos.value[index].completed = updatedTodo.completed
     }
     return updatedTodo
   } catch (err: any) {

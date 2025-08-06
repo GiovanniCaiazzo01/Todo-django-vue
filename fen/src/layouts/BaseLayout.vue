@@ -4,5 +4,4 @@
     <slot name="main"></slot>
 
     <slot name="footer"></slot>
-
 </template>

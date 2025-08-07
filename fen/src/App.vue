@@ -11,7 +11,9 @@
 
             <!-- Main Content -->
             <template #main>
-                <TodoPage />
+                <Transition>
+                    <RouterView />
+                </Transition>
             </template>
 
             <!-- Footer -->
@@ -31,7 +33,6 @@ import Navigation from "./layouts/Navigation.vue";
 import Footer from "./layouts/Footer.vue";
 import { useTheme } from "./composables/useTheme";
 import BaseLayout from "./layouts/BaseLayout.vue";
-import TodoPage from "./pages/Todo/TodoPage.vue";
 import { useTodoStore } from "./stores/todoStore/todoStore";
 
 // Initialize theme

@@ -29,10 +29,10 @@
 <script setup lang="ts">
 import Navigation from "./layouts/Navigation.vue";
 import Footer from "./layouts/Footer.vue";
-import { useTodoStore } from "./stores/todoStore";
 import { useTheme } from "./composables/useTheme";
 import BaseLayout from "./layouts/BaseLayout.vue";
 import TodoPage from "./pages/Todo/TodoPage.vue";
+import { useTodoStore } from "./stores/todoStore/todoStore";
 
 // Initialize theme
 const { initTheme } = useTheme();

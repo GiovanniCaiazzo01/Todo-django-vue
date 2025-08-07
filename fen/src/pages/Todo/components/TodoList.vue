@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import type { Todo } from "@/types";
-import { useTodoStore } from "@/stores/todoStore";
+import { useTodoStore } from "@/stores/todoStore/todoStore";
 
 const store = useTodoStore();
 const formData = ref({ title: "" });

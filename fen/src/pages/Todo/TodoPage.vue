@@ -28,10 +28,10 @@
 </template>
 
 <script setup lang="ts">
-import { useTodoStore } from "@/stores/todoStore";
 import TodoList from "./components/TodoList.vue";
 import EmptyState from "./components/EmptyState.vue";
 import ErrorState from "./components/ErrorState.vue";
+import { useTodoStore } from "@/stores/todoStore/todoStore";
 
 // Todo state
 const store = useTodoStore();

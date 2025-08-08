@@ -43,6 +43,53 @@
     .loading {
         @apply animate-spin rounded-full border-4 border-gray-200 border-t-primary-600;
     }
+
+    /* --- Form primitives --- */
+    .form-group {
+        @apply space-y-1;
+    }
+    .form-row {
+        @apply grid grid-cols-1 gap-4 sm:grid-cols-2;
+    }
+    .label {
+        @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
+    }
+    .hint {
+        @apply text-xs text-gray-500 dark:text-gray-400;
+    }
+    .error-text {
+        @apply mt-1 text-sm text-red-600 dark:text-red-400;
+    }
+
+    /* Stati input */
+    .input-invalid {
+        @apply border-red-500 focus:ring-red-500 focus:border-red-500;
+    }
+    .input-valid {
+        @apply border-green-500 focus:ring-green-500 focus:border-green-500;
+    }
+
+    /* Input con icona a sinistra (opzionale) */
+    .input-wrap {
+        @apply relative;
+    }
+    .input-left {
+        @apply absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none;
+    }
+    .input-pad-left {
+        @apply pl-10;
+    }
+
+    /* Card header/footer opzionali */
+    .card-header {
+        @apply p-6 border-b border-gray-200 dark:border-gray-700;
+    }
+    .card-body {
+        @apply p-6 space-y-5;
+    }
+    .card-footer {
+        @apply p-6 border-t border-gray-200 dark:border-gray-700;
+    }
 }
 
 @layer utilities {
@@ -57,5 +104,9 @@
 
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
+    }
+
+    .sr-only {
+        @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
     }
 }

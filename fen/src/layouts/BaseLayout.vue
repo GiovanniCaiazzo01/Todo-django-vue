@@ -1,7 +1,15 @@
+<!-- src/layouts/BaseLayout.vue -->
 <template>
-    <slot name="header"></slot>
+    <!-- Wrapper verticale -->
+    <div class="flex flex-col flex-1">
+        <!-- Header -->
+        <slot name="header" />
+        <!-- Main -->
+        <div class="flex-1 flex flex-col">
+            <slot name="main" />
+        </div>
 
-    <slot name="main"></slot>
-
-    <slot name="footer"></slot>
+        <!-- Footer -->
+        <slot name="footer" />
+    </div>
 </template>

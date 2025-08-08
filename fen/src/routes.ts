@@ -1,10 +1,21 @@
 import { createWebHistory, createRouter } from "vue-router";
-import TodoPage from "@/pages/Todo/TodoPage.vue";
-import Test from "@/pages/Test/test.vue";
 
 const routes = [
-  { path: "/", name: "todo", component: TodoPage },
-  { path: "/test", name: "test", component: Test },
+  {
+    path: "/",
+    name: "todo",
+    component: () => import("@/pages/Todo/TodoPage.vue"),
+  },
+  {
+    path: "/auth",
+    children: [
+      {
+        path: "sign-up",
+        name: "sign-un",
+        component: () => import("@/pages/Auth/SignUp/SignUp.vue"),
+      },
+    ],
+  },
 ];
 
 export const router = createRouter({

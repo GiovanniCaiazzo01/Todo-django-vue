@@ -59,9 +59,9 @@ interface NavigationProps {
 }
 
 const route = useRoute();
-const routeTo = computed(() => (route.name === "todo" ? "/test" : "/"));
+const routeTo = computed(() => (route.name === "todo" ? "/auth/sign-up" : "/"));
 const routeLabel = computed(() =>
-    route.name === "todo" ? "Vai a Test" : "Vai alla Todo-list",
+    route.name === "todo" ? "Sign up" : "Vai alla Todo-list",
 );
 
 withDefaults(defineProps<NavigationProps>(), {

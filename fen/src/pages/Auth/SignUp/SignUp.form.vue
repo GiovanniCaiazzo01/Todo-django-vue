@@ -267,10 +267,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { Form, Field, ErrorMessage, useForm } from "vee-validate";
+import { Form, Field, ErrorMessage } from "vee-validate";
 import { SignUpFormType } from "./SignUp.schema";
+import { AuthService } from "@/services/auth/authApi";
 
-const {} = useForm();
 const isSubmitting = ref(false);
 const isSubmitSuccessful = ref(false);
 const showPassword = ref(false);
@@ -279,10 +279,11 @@ const showConfirm = ref(false);
 const onSubmit = async (values: Record<string, any>) => {
     isSubmitSuccessful.value = false;
     isSubmitting.value = true;
+    console.log(values);
     try {
         // simulazione chiamata API
-        await new Promise((r) => setTimeout(r, 800));
-        console.log("Registrazione:", values);
+        const result = await AuthService.signUp(values);
+        console.log("Registrazione:", values, { result });
         isSubmitSuccessful.value = true;
     } finally {
         isSubmitting.value = false;

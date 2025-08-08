@@ -1,7 +1,7 @@
 // src/stores/todo.actions.ts
-import { TodoService } from "@/services/api";
-import type { CreateTodoData, UpdateTodoData } from "@/types";
+import { TodoService } from "@/services/todo/todoApi";
 import type { useTodoStore } from "./todoStore";
+import type { CreateTodoData, UpdateTodoData } from "@/types/todo";
 
 // NB: funzione normale, non arrow, così TypeScript accetta il parametro this
 async function loadTodos(this: ReturnType<typeof useTodoStore>) {

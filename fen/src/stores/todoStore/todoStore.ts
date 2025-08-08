@@ -1,7 +1,6 @@
-import { TodoService } from "@/services/api";
-import type { CreateTodoData, Todo, UpdateTodoData } from "@/types";
 import { defineStore } from "pinia";
 import * as todoActions from "./actions";
+import type { Todo } from "@/types/todo";
 
 type UseTodoStore = {
   todos: Todo[];

@@ -22,10 +22,10 @@ class TodoViewSet(viewsets.ModelViewSet):
         # Use the create serializer for validation
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         # Save the instance
         instance = serializer.save()
-        
+
         # Return the complete object using the full serializer
         full_serializer = TodoSerializer(instance)
         headers = self.get_success_headers(full_serializer.data)
@@ -40,5 +40,4 @@ class TodoViewSet(viewsets.ModelViewSet):
         instance.delete()
 
     def perform_update(self, serializer):
-        serializer.save(updated_at=None)
-
+        serializer.save()

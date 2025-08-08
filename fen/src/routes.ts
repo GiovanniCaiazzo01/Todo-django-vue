@@ -11,7 +11,7 @@ const routes = [
     children: [
       {
         path: "sign-up",
-        name: "sign-un",
+        name: "sign-up",
         component: () => import("@/pages/Auth/SignUp/SignUp.vue"),
       },
     ],

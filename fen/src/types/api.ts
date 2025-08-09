@@ -1,4 +1,4 @@
-export interface ApiResponse<T> {
+export interface ApiListResponse<T> {
   count: number;
   next: string | null;
   previous: string | null;

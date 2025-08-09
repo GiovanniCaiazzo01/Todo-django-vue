@@ -9,6 +9,7 @@ async function loadTodos(this: ReturnType<typeof useTodoStore>) {
     this.isLoading = true;
     this.error = null;
     const { results } = await TodoService.getAll();
+    console.log("todos lista: ", await TodoService.getAll());
     this.todos = results;
   } catch (err: any) {
     this.error = err.response?.data?.detail || "Failed to load todos";

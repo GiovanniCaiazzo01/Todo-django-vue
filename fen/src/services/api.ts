@@ -9,6 +9,12 @@ const api = axios.create({
   },
 });
 
+axios.interceptors.request.use((config) => {
+  const t = localStorage.getItem("authToken");
+  if (t) config.headers.Authorization = `Token ${t}`;
+  return config;
+});
+
 // Response interceptor for error handling
 api.interceptors.response.use(
   (response) => response,

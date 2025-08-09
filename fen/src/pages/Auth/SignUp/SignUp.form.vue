@@ -268,6 +268,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
+import { useRouter } from "vue-router";
 import { SignUpFormType } from "./SignUp.schema";
 import { AuthService } from "@/services/auth/authApi";
 
@@ -275,16 +276,22 @@ const isSubmitting = ref(false);
 const isSubmitSuccessful = ref(false);
 const showPassword = ref(false);
 const showConfirm = ref(false);
+const router = useRouter();
 
 const onSubmit = async (values: Record<string, any>) => {
     isSubmitSuccessful.value = false;
     isSubmitting.value = true;
-    console.log(values);
     try {
         // simulazione chiamata API
         const result = await AuthService.signUp(values);
         console.log("Registrazione:", values, { result });
-        isSubmitSuccessful.value = true;
+        if (result) {
+            const { token } = result;
+            localStorage.setItem("authtoken", token);
+            isSubmitSuccessful.value = true;
+            // redirect to dashboard
+            router.push("/dashboard");
+        }
     } finally {
         isSubmitting.value = false;
     }

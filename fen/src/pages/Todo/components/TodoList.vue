@@ -63,14 +63,16 @@ onMounted(store.loadTodos);
 
 const handleCreate = async () => {
     if (!formData.value.title) return;
-    await store.createTodo({
+    const create = await store.createTodo({
         title: formData.value.title,
     });
     formData.value.title = "";
+    console.log("create singolo: ", create);
 };
 
 const toggle = async (todo: Todo) => {
-    await store.toggleTodo(todo.id);
+    const update = await store.toggleTodo(todo.id);
+    console.log("update singolo: ", update);
 };
 
 const remove = async (todo: Todo) => {

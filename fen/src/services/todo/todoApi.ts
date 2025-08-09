@@ -1,12 +1,12 @@
-import type { ApiResponse } from "@/types/api";
+import type { ApiListResponse } from "@/types/api";
 import api from "../api";
 import type { CreateTodoData, Todo, UpdateTodoData } from "@/types/todo";
 
 export class TodoService {
   private static readonly ENDPOINT = "/todos/";
 
-  static async getAll(): Promise<ApiResponse<Todo>> {
-    const response = await api.get<ApiResponse<Todo>>(this.ENDPOINT);
+  static async getAll(): Promise<ApiListResponse<Todo>> {
+    const response = await api.get<ApiListResponse<Todo>>(this.ENDPOINT);
     return response.data;
   }
 

@@ -1,9 +1,7 @@
-// src/stores/todo.actions.ts
 import { TodoService } from "@/services/todo/todoApi";
 import type { useTodoStore } from "./todoStore";
 import type { CreateTodoData, UpdateTodoData } from "@/types/todo";
 
-// NB: funzione normale, non arrow, così TypeScript accetta il parametro this
 async function loadTodos(this: ReturnType<typeof useTodoStore>) {
   try {
     this.isLoading = true;
@@ -12,7 +10,8 @@ async function loadTodos(this: ReturnType<typeof useTodoStore>) {
     console.log("todos lista: ", await TodoService.getAll());
     this.todos = results;
   } catch (err: any) {
-    this.error = err.response?.data?.detail || "Failed to load todos";
+    console.log({ err });
+    this.error = "Failed to load todos";
     console.error("Error loading todos:", err);
   } finally {
     this.isLoading = false;
@@ -26,10 +25,10 @@ async function createTodo(
   try {
     this.error = null;
     const newTodo = await TodoService.create(data);
-    this.todos.unshift(newTodo); // Add to beginning of list
+    this.todos.unshift(newTodo);
     return newTodo;
   } catch (err: any) {
-    this.error = err.response?.data?.detail || "Failed to create todo";
+    this.error = "Failed to create todo";
     console.error("Error creating todo:", err);
     throw err;
   }
@@ -49,7 +48,7 @@ async function updateTodo(
     }
     return updatedTodo;
   } catch (err: any) {
-    this.error = err.response?.data?.detail || "Failed to update todo";
+    this.error = "Failed to update todo";
     console.error("Error updating todo:", err);
     throw err;
   }
@@ -61,7 +60,7 @@ async function deleteTodo(this: ReturnType<typeof useTodoStore>, id: number) {
     await TodoService.delete(id);
     this.todos = this.todos.filter((todo) => todo.id !== id);
   } catch (err: any) {
-    this.error = err.response?.data?.detail || "Failed to delete todo";
+    this.error = "Failed to delete todo";
     console.error("Error deleting todo:", err);
     throw err;
   }
@@ -83,7 +82,7 @@ async function toggleTodo(this: ReturnType<typeof useTodoStore>, id: number) {
     }
     return updatedTodo;
   } catch (err: any) {
-    this.error = err.response?.data?.detail || "Failed to toggle todo";
+    this.error = "Failed to toggle todo";
     console.error("Error toggling todo:", err);
     throw err;
   }
@@ -97,8 +96,7 @@ async function clearCompleted(this: ReturnType<typeof useTodoStore>) {
     await Promise.all(completedIds.map((id) => TodoService.delete(id)));
     this.todos = this.todos.filter((todo) => !todo.completed);
   } catch (err: any) {
-    this.error =
-      err.response?.data?.detail || "Failed to clear completed todos";
+    this.error = "Failed to clear completed todos";
     console.error("Error clearing completed todos:", err);
     throw err;
   }

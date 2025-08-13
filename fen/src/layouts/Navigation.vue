@@ -38,7 +38,7 @@
                         <Moon v-else class="w-5 h-5 text-gray-600" />
                     </button>
 
-                    <RouterLink :to="routeTo">
+                    <RouterLink :to="{ name: routeTo }">
                         {{ routeLabel }}
                     </RouterLink>
                 </div>
@@ -52,6 +52,7 @@ import { Sun, Moon } from "lucide-vue-next";
 import { useTheme } from "@/composables/useTheme";
 import { RouterLink, useRoute } from "vue-router";
 import { computed } from "vue";
+import { Navlinks } from "@/data/navigation";
 
 interface NavigationProps {
     activeCount?: number;
@@ -59,9 +60,15 @@ interface NavigationProps {
 }
 
 const route = useRoute();
-const routeTo = computed(() => (route.name === "todo" ? "/auth/sign-in" : "/"));
+const routeTo = computed(() =>
+    route.name === Navlinks.landingPage.name
+        ? Navlinks.signIn.name
+        : Navlinks.landingPage.name,
+);
 const routeLabel = computed(() =>
-    route.name === "todo" ? "Sign in" : "Vai alla Todo-list",
+    route.name === Navlinks.landingPage.name
+        ? Navlinks.signIn.name
+        : "Vai alla Todo-list",
 );
 
 withDefaults(defineProps<NavigationProps>(), {

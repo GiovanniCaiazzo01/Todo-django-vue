@@ -10,12 +10,7 @@
                 </p>
             </div>
 
-            <Form
-                :validation-schema="SignUpFormType"
-                @submit="onSubmit"
-                v-slot="{ errors }"
-                novalidate
-            >
+            <form @submit="submit" novalidate>
                 <div class="card-body">
                     <!-- Nome + Cognome -->
                     <div class="form-row">
@@ -94,6 +89,38 @@
                                 Your last name.
                             </p>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label" for="userName">Username</label>
+                        <Field name="userName" v-slot="{ field, meta }">
+                            <input
+                                v-bind="field"
+                                id="userName"
+                                type="text"
+                                autocomplete="username"
+                                :class="[
+                                    'input',
+                                    meta.touched && !meta.valid
+                                        ? 'input-invalid'
+                                        : '',
+                                ]"
+                                :aria-invalid="!meta.valid"
+                                :aria-describedby="
+                                    !meta.valid
+                                        ? 'userName-error'
+                                        : 'userName-hint'
+                                "
+                            />
+                        </Field>
+                        <ErrorMessage name="userName" v-slot="{ message }">
+                            <p id="userName-error" class="error-text">
+                                {{ message }}
+                            </p>
+                        </ErrorMessage>
+                        <p v-if="!errors.email" id="userName-hint" class="hint">
+                            Your username.
+                        </p>
                     </div>
 
                     <!-- Email -->
@@ -202,7 +229,7 @@
                                     ]"
                                     :aria-invalid="!meta.valid"
                                     :aria-describedby="
-                                        meta.valid
+                                        !meta.valid
                                             ? 'confirmPassword-error'
                                             : 'confirmPassword-hint'
                                     "
@@ -259,41 +286,74 @@
                     >
                         ✅ Registration submitted successfully!
                     </p>
+                    <p
+                        class="mt-4 text-center text-sm text-gray-500 dark:text-gray-400"
+                    >
+                        Already have an account?
+                        <router-link
+                            :to="{ name: Navlinks.signIn.name }"
+                            class="text-primary-600 hover:underline dark:text-primary-400"
+                        >
+                            Log in
+                        </router-link>
+                    </p>
                 </div>
-            </Form>
+            </form>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { Form, Field, ErrorMessage } from "vee-validate";
+import { Field, ErrorMessage, useForm } from "vee-validate";
 import { useRouter } from "vue-router";
 import { SignUpFormType } from "./SignUp.schema";
 import { AuthService } from "@/services/auth/authApi";
+import type { SignUpForm } from "./types";
+import { Navlinks } from "@/data/navigation";
 
-const isSubmitting = ref(false);
 const isSubmitSuccessful = ref(false);
 const showPassword = ref(false);
 const showConfirm = ref(false);
 const router = useRouter();
 
-const onSubmit = async (values: Record<string, any>) => {
+const { handleSubmit, isSubmitting, errors, setFieldError } =
+    useForm<SignUpForm>({
+        validationSchema: SignUpFormType,
+    });
+
+const submit = handleSubmit(async (values) => {
     isSubmitSuccessful.value = false;
-    isSubmitting.value = true;
     try {
-        // simulazione chiamata API
-        const result = await AuthService.signUp(values);
-        console.log("Registrazione:", values, { result });
-        if (result) {
-            const { token } = result;
-            localStorage.setItem("authtoken", token);
+        const result = await AuthService.signUp({
+            username: values.userName,
+            lastName: values.lastName,
+            firstName: values.firstName,
+            email: values.email,
+            password: values.password,
+        });
+
+        if (result?.token) {
+            localStorage.setItem("authtoken", result.token);
             isSubmitSuccessful.value = true;
-            // redirect to dashboard
-            router.push("/dashboard");
+            router.push(Navlinks.dashboard.route);
         }
-    } finally {
-        isSubmitting.value = false;
+    } catch (error: any) {
+        const data = error?.response?.data;
+        const nonFieldError = data?.non_field_errors;
+        if (nonFieldError) {
+            data?.username && setFieldError("userName", nonFieldError.username);
+            data?.email && setFieldError("email", nonFieldError.email);
+        }
+
+        if (
+            !nonFieldError &&
+            (data?.username || data?.email || data?.password)
+        ) {
+            data?.username && setFieldError("userName", data?.username[0]);
+            data?.email && setFieldError("email", data?.email[0]);
+            data?.password && setFieldError("password", data?.password[0]);
+        }
     }
-};
+});
 </script>

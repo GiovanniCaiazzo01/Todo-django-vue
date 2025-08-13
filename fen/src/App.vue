@@ -14,6 +14,7 @@
                 <Transition>
                     <RouterView />
                 </Transition>
+                <ApiErrorToaster />
             </template>
 
             <!-- Footer -->
@@ -36,6 +37,7 @@ import BaseLayout from "./layouts/BaseLayout.vue";
 import Navigation from "./layouts/Navigation.vue";
 import Footer from "./layouts/Footer.vue";
 import { computed } from "vue";
+import ApiErrorToaster from "./components/ApiErrorToaster.vue";
 
 // Initialize theme
 const { initTheme } = useTheme();

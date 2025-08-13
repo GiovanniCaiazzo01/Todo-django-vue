@@ -9,13 +9,7 @@
                     Fill in the fields to sign in.
                 </p>
             </div>
-
-            <Form
-                :validation-schema="SignInFormType"
-                @submit="onSubmit"
-                v-slot="{ errors, isSubmitting, submitCount }"
-                novalidate
-            >
+            <form @submit="submit" novalidate>
                 <div class="card-body">
                     <!-- Email -->
                     <div class="form-group">
@@ -122,23 +116,58 @@
                     >
                         ✅ authenticated!
                     </p>
+                    <p
+                        class="mt-4 text-center text-sm text-gray-500 dark:text-gray-400"
+                    >
+                        Don’t have an account?
+                        <router-link
+                            :to="{ name: Navlinks.signUp.name }"
+                            class="text-primary-600 hover:underline dark:text-primary-400"
+                        >
+                            Sign up
+                        </router-link>
+                    </p>
                 </div>
-            </Form>
+            </form>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { Form, Field, ErrorMessage } from "vee-validate";
+import { Field, ErrorMessage, useForm } from "vee-validate";
 import { SignInFormType } from "./SignIn.schema";
 import { AuthService } from "@/services/auth/authApi";
+import type { SignInForm } from "./types";
+import { useRouter } from "vue-router";
+import { Navlinks } from "@/data/navigation";
 
 const showPassword = ref(false);
 const submitSuccess = ref(false);
+const router = useRouter();
 
-async function onSubmit(values: { email: string; password: string }) {
-    const result = await AuthService.signIn(values);
-    console.log(result);
-}
+const { handleSubmit, isSubmitting, submitCount, errors, setFieldError } =
+    useForm<SignInForm>({
+        validationSchema: SignInFormType,
+    });
+
+const submit = handleSubmit(async (values) => {
+    submitSuccess.value = false;
+    try {
+        const result = await AuthService.signIn(values);
+        if (result?.token) {
+            localStorage.setItem("authtoken", result.token);
+            submitSuccess.value = true;
+            router.push(Navlinks.dashboard.route);
+        }
+    } catch (error: any) {
+        console.error(error);
+        const data = error?.response?.data;
+        const nonFieldError = data.non_field_errors[0];
+        if (nonFieldError) {
+            setFieldError("email", nonFieldError);
+            setFieldError("password", nonFieldError);
+        }
+    }
+});
 </script>

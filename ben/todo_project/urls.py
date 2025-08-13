@@ -1,15 +1,16 @@
 """
 URL configuration for todo_project project.
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/todos/', include('todos.urls')),
-    path('api/auth/', include('userAuth.urls')),
+    path("admin/", admin.site.urls),
+    path("api/todos/", include("todos.urls")),
+    path("api/auth/", include("userAuth.urls")),
 ]
 
 # Serve media files in development

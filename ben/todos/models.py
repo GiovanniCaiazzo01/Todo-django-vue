@@ -6,6 +6,7 @@ class Todo(models.Model):
     """
     Todo model with basic CRUD functionality
     """
+
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     completed = models.BooleanField(default=False)
@@ -13,9 +14,9 @@ class Todo(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
-        verbose_name = 'Todo'
-        verbose_name_plural = 'Todos'
+        ordering = ["-created_at"]
+        verbose_name = "Todo"
+        verbose_name_plural = "Todos"
 
     def __str__(self):
         return self.title

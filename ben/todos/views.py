@@ -9,12 +9,13 @@ class TodoViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing Todo instances
     """
+
     queryset = Todo.objects.all()
 
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.action == "create":
             return TodoCreateSerializer
-        elif self.action in ['update', 'partial_update']:
+        elif self.action in ["update", "partial_update"]:
             return TodoUpdateSerializer
         return TodoSerializer
 
@@ -29,7 +30,9 @@ class TodoViewSet(viewsets.ModelViewSet):
         # Return the complete object using the full serializer
         full_serializer = TodoSerializer(instance)
         headers = self.get_success_headers(full_serializer.data)
-        return Response(full_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            full_serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

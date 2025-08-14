@@ -1,17 +1,25 @@
-from .validators import validate_strong_password
-
-# from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
+from .validators import validate_strong_password
 
 
-# User = get_user_model()
+class UserPublicSerializer(serializers.ModelSerializer):
+    firstName = serializers.CharField(source="first_name", read_only=True)
+    lastName = serializers.CharField(source="last_name", read_only=True)
+
+    class Meta:
+        model = User
+        fields = ("id", "username", "email", "firstName", "lastName")
 
 
 class SignUpSerializer(serializers.ModelSerializer):
-    firstName = serializers.CharField(source="first_name", )
-    lastName  = serializers.CharField(source="last_name", )
+    firstName = serializers.CharField(
+        source="first_name", required=False, allow_blank=True
+    )
+    lastName = serializers.CharField(
+        source="last_name", required=False, allow_blank=True
+    )
     token = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -34,25 +42,15 @@ class SignUpSerializer(serializers.ModelSerializer):
             },
         }
 
-    def validate_username(self, value):
-        if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("Username already taken")
-        return value
-
     def validate_email(self, value):
         if value and User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Email already in use")
+            raise serializers.ValidationError("A user with that e-mail already exists.")
         return value
 
     def create(self, validated_data):
         # create_user gestisce hashing password
-        return User.objects.create_user(
-            username=validated_data["username"],
-            email=validated_data.get("email", ""),
-            password=validated_data["password"],
-            firstName=validated_data["firstName"],
-            lastName=validated_data["lastName"],
-        )
+        password = validated_data.pop("password")
+        return User.objects.create_user(password=password, **validated_data)
 
     def get_token(self, obj):
         token, _ = Token.objects.get_or_create(user=obj)
@@ -62,7 +60,7 @@ class SignUpSerializer(serializers.ModelSerializer):
 class SignInSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(
-        write_only=True, validators=[validate_strong_password]
+        write_only=True,
     )
 
     def validate(self, attrs):
@@ -75,13 +73,20 @@ class SignInSerializer(serializers.Serializer):
         )
 
         if not user:
-            raise serializers.ValidationError(user_wrong_credentail_message)
+            raise serializers.ValidationError(
+                {
+                    "email": user_wrong_credentail_message,
+                    "password": user_wrong_credentail_message,
+                }
+            )
 
         if not user.check_password(password):
-            raise serializers.ValidationError(user_wrong_credentail_message)
-
-        if not user.is_active:
-            raise serializers.ValidationError("User inactive")
+            raise serializers.ValidationError(
+                {
+                    "email": user_wrong_credentail_message,
+                    "password": user_wrong_credentail_message,
+                }
+            )
 
         attrs["user"] = user
         return attrs

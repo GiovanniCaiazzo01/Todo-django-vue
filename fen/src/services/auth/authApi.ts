@@ -1,23 +1,18 @@
-import type { SignInResponse, SignUpResponse } from "@/types/auth";
+import type { AuthResponse } from "@/types/auth";
 import api from "../api";
 
 export class AuthService {
   private static readonly ENDPOINT = "/auth";
 
-  static async signUp(
-    userData: Pick<
-      User,
-      "username" | "lastName" | "firstName" | "email" | "password"
-    >,
-  ): Promise<SignUpResponse> {
-    console.log(userData);
+  static async signUp(userData: User): Promise<AuthResponse> {
     const response = await api.post(`${this.ENDPOINT}/sign-up/`, userData);
+    console.log(response.data);
     return response.data;
   }
 
   static async signIn(
     userData: Pick<User, "email" | "password">,
-  ): Promise<SignInResponse> {
+  ): Promise<AuthResponse> {
     const respose = await api.post(`${this.ENDPOINT}/sign-in/`, {
       email: userData.email,
       password: userData.password,

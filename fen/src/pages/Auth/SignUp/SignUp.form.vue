@@ -92,11 +92,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="label" for="userName">Username</label>
-                        <Field name="userName" v-slot="{ field, meta }">
+                        <label class="label" for="username">Username</label>
+                        <Field name="username" v-slot="{ field, meta }">
                             <input
                                 v-bind="field"
-                                id="userName"
+                                id="username"
                                 type="text"
                                 autocomplete="username"
                                 :class="[
@@ -108,17 +108,17 @@
                                 :aria-invalid="!meta.valid"
                                 :aria-describedby="
                                     !meta.valid
-                                        ? 'userName-error'
-                                        : 'userName-hint'
+                                        ? 'username-error'
+                                        : 'username-hint'
                                 "
                             />
                         </Field>
-                        <ErrorMessage name="userName" v-slot="{ message }">
-                            <p id="userName-error" class="error-text">
+                        <ErrorMessage name="username" v-slot="{ message }">
+                            <p id="username-error" class="error-text">
                                 {{ message }}
                             </p>
                         </ErrorMessage>
-                        <p v-if="!errors.email" id="userName-hint" class="hint">
+                        <p v-if="!errors.email" id="username-hint" class="hint">
                             Your username.
                         </p>
                     </div>
@@ -325,13 +325,7 @@ const { handleSubmit, isSubmitting, errors, setFieldError } =
 const submit = handleSubmit(async (values) => {
     isSubmitSuccessful.value = false;
     try {
-        const result = await AuthService.signUp({
-            username: values.userName,
-            lastName: values.lastName,
-            firstName: values.firstName,
-            email: values.email,
-            password: values.password,
-        });
+        const result = await AuthService.signUp({ ...values });
 
         if (result?.token) {
             localStorage.setItem("authtoken", result.token);
@@ -339,21 +333,11 @@ const submit = handleSubmit(async (values) => {
             router.push(Navlinks.dashboard.route);
         }
     } catch (error: any) {
+        console.log(error);
         const data = error?.response?.data;
-        const nonFieldError = data?.non_field_errors;
-        if (nonFieldError) {
-            data?.username && setFieldError("userName", nonFieldError.username);
-            data?.email && setFieldError("email", nonFieldError.email);
-        }
-
-        if (
-            !nonFieldError &&
-            (data?.username || data?.email || data?.password)
-        ) {
-            data?.username && setFieldError("userName", data?.username[0]);
-            data?.email && setFieldError("email", data?.email[0]);
-            data?.password && setFieldError("password", data?.password[0]);
-        }
+        data?.username && setFieldError("username", data?.username[0]);
+        data?.email && setFieldError("email", data?.email[0]);
+        data?.password && setFieldError("password", data?.password[0]);
     }
 });
 </script>

@@ -1,14 +1,4 @@
-export interface SignUpResponse {
-  username: string;
-  email: string;
-  token: string;
-}
-
-export interface SignInResponse {
-  user: {
-    id: string;
-    username: string;
-    email: string;
-  };
+export interface AuthResponse {
+  user: Omit<User, "password">;
   token: string;
 }

@@ -4,12 +4,12 @@
             <SignInForm />
         </div>
         <div
-            class="hidden h-full w-full lg:flex lg:items-center lg:justify-center"
+            class="hidden h-full w-full lg:flex lg:items-center lg:justify-center overflow-hidden"
         >
             <img
-                :src="authSignUpImg"
+                :src="authSignInImg"
                 loading="lazy"
-                class="object-cover h-full w-full"
+                class="object-fit h-full w-full animate-kenburns"
             />
         </div>
     </div>
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import SignInForm from "./SignIn.form.vue";
-import authSignUpImg from "/assets/auth-sign-up.png";
+import authSignInImg from "/assets/auth-sign-in.png";
 </script>
 
 <style scoped>

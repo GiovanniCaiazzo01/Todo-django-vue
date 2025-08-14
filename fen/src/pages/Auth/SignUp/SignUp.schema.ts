@@ -3,7 +3,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 
 const signUpSchema = z
   .object({
-    userName: z.string().min(2, "Username must have at least 2 characters"),
+    username: z.string().min(2, "Username must have at least 2 characters"),
     firstName: z.string().min(2, "First name must have at least 2 characters"),
     lastName: z.string().min(2, "Last name must have at least 2 characters"),
     email: z.string().email("Please enter a valid email address"),

@@ -25,17 +25,19 @@ api.interceptors.response.use(
     const url = error.config?.url;
     const isServerError =
       status >= 500 || statusText === "Internal Server Error";
+    console.log({ isServerError: status >= 500, status });
     if (isServerError) {
-      correlationId;
-      error.response?.headers?.["x-correlation-id"] ??
+      correlationId =
+        error.response?.headers?.["x-correlation-id"] ??
         error.response?.data?.traceId;
+
+      errorBus.emit("apiError", {
+        status,
+        url,
+        correlationId,
+        message: "Internal server error, please try again later",
+      });
     }
-    errorBus.emit("apiError", {
-      status,
-      url,
-      correlationId,
-      message: "Internal server error, please try again later",
-    });
 
     return Promise.reject(error);
   },

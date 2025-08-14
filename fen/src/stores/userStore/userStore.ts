@@ -1,17 +1,17 @@
 import { defineStore } from "pinia";
 
 type UseUserStore = {
-  user: User;
+  user: Omit<User, "password">;
   type: "member" | "guest";
 };
 
 export const useUserStore = defineStore("user", {
   state: (): UseUserStore => ({
     user: {
+      id: "",
       email: "",
       firstName: "",
       lastName: "",
-      password: "",
       username: "",
     },
     type: "member",

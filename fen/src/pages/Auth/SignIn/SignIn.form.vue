@@ -163,11 +163,10 @@ const submit = handleSubmit(async (values) => {
     } catch (error: any) {
         console.error(error);
         const data = error?.response?.data;
-        const nonFieldError = data.non_field_errors[0];
-        if (nonFieldError) {
-            setFieldError("email", nonFieldError);
-            setFieldError("password", nonFieldError);
-        }
+        const emailError = data?.email[0];
+        const passwordError = data?.password[0];
+        emailError && setFieldError("email", emailError);
+        passwordError && setFieldError("password", passwordError);
     }
 });
 </script>

@@ -10,7 +10,7 @@ export class TodoService {
     return response.data;
   }
 
-  static async getById(id: number): Promise<Todo> {
+  static async getById(id: Todo["id"]): Promise<Todo> {
     const response = await api.get<Todo>(`${this.ENDPOINT}${id}/`);
     return response.data;
   }
@@ -20,7 +20,7 @@ export class TodoService {
     return response.data;
   }
 
-  static async update(id: number, data: UpdateTodoData): Promise<Todo> {
+  static async update(id: Todo["id"], data: UpdateTodoData): Promise<Todo> {
     const response = await api.patch<Todo>(`${this.ENDPOINT}${id}/`, data);
     return response.data;
   }
@@ -30,7 +30,7 @@ export class TodoService {
   }
 
   static async toggleComplete(
-    id: number,
+    id: Todo["id"],
     completed: boolean,
   ): Promise<Pick<Todo, "completed" | "description" | "title">> {
     return this.update(id, { completed });

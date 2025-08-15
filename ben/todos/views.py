@@ -34,7 +34,7 @@ class TodoViewSet(viewsets.ModelViewSet):
             full_serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
 
-    def destroy(self, request, *args, **kwargs):
+    def destroy(self, request, *ergs, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)

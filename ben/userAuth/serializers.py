@@ -1,30 +1,22 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
 from .validators import validate_strong_password
 
 
+BASE_USER_FIELDS = ["id", "username", "email", "firstName", "lastName"]
+
+
 class UserPublicSerializer(serializers.ModelSerializer):
-    firstName = serializers.CharField(source="first_name", read_only=True)
-    lastName = serializers.CharField(source="last_name", read_only=True)
-
-    class Meta:
-        model = User
-        fields = ("id", "username", "email", "firstName", "lastName")
-
-
-class SignUpSerializer(serializers.ModelSerializer):
     firstName = serializers.CharField(
-        source="first_name", required=False, allow_blank=True
+        source="first_name", allow_blank=True, required=False
     )
     lastName = serializers.CharField(
-        source="last_name", required=False, allow_blank=True
+        source="last_name", allow_blank=True, required=False
     )
-    token = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ["username", "firstName", "lastName", "email", "password", "token"]
+        fields = BASE_USER_FIELDS
         extra_kwargs = {
             "username": {
                 "required": True,
@@ -34,16 +26,29 @@ class SignUpSerializer(serializers.ModelSerializer):
                 "required": True,
                 "error_messages": {"required": "Email is mandatory."},
             },
-            "password": {
-                "required": True,
-                "write_only": True,
-                "validators": [validate_strong_password],
-                "error_messages": {"required": "Password is mandatory."},
-            },
         }
 
+
+class SignUpSerializer(UserPublicSerializer):
+    password = serializers.CharField(
+        write_only=True,
+        required=True,
+        validators=[validate_strong_password],
+        error_messages={"required": "Password is mandatory."},
+    )
+
+    class Meta(UserPublicSerializer.Meta):
+        fields = BASE_USER_FIELDS + ["password"]
+
+    def validate_username(self, value):
+        if value and User.objects.filter(username=value).exists():
+            raise serializers.ValidationError(
+                "A user with that username already exists."
+            )
+        return value
+
     def validate_email(self, value):
-        if value and User.objects.filter(email=value).exists():
+        if value and User.objects.filter(email__iexact=value).exists():
             raise serializers.ValidationError("A user with that e-mail already exists.")
         return value
 
@@ -52,16 +57,10 @@ class SignUpSerializer(serializers.ModelSerializer):
         password = validated_data.pop("password")
         return User.objects.create_user(password=password, **validated_data)
 
-    def get_token(self, obj):
-        token, _ = Token.objects.get_or_create(user=obj)
-        return token.key
-
 
 class SignInSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField(
-        write_only=True,
-    )
+    password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
         email = attrs.get("email")

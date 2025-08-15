@@ -35,7 +35,13 @@
                             type="checkbox"
                             class="h-4 w-4 text-primary-600"
                             :checked="todo.completed"
-                            @change="() => toggle(todo)"
+                            @change="
+                                () =>
+                                    toggle({
+                                        id: todo.id,
+                                        completed: todo.completed,
+                                    })
+                            "
                         />
                         <div
                             :class="{
@@ -102,12 +108,13 @@ function handleCreate() {
 }
 
 // Toggle completed
-function toggle(todo: Todo) {
+function toggle(todo: Pick<Todo, "id" | "completed">) {
     store.updateTodo(todo.id, { completed: !todo.completed });
 }
 
 // Remove todo
 function remove(todoId: Todo["id"]) {
+    console.log(todoId);
     store.deleteTodo(todoId);
 }
 

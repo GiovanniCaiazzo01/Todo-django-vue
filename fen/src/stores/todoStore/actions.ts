@@ -36,7 +36,7 @@ async function createTodo(
 
 async function updateTodo(
   this: ReturnType<typeof useTodoStore>,
-  id: number,
+  id: Todo["id"],
   data: UpdateTodoData,
 ) {
   try {
@@ -69,7 +69,10 @@ async function deleteTodo(
   }
 }
 
-async function toggleTodo(this: ReturnType<typeof useTodoStore>, id: number) {
+async function toggleTodo(
+  this: ReturnType<typeof useTodoStore>,
+  id: Todo["id"],
+) {
   const todo = this.todos.find((t) => t.id === id);
   if (!todo) {
     console.error("Todo not found with ID:", id);

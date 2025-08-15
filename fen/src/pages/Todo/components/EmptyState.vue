@@ -13,6 +13,8 @@
 </template>
 
 <script setup lang="ts">
+import { CheckCircle } from "lucide-vue-next";
+
 type EmptyStateProps = {
     isLoading: boolean;
     todosCount: number;

@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-7xl mx-auto p-6">
         <!-- Todo Input Form -->
-        <form @submit.prevent="handleCreate" class="mb-4">
+        <form @submit.prevent="handleCreate" class="mb-4 space-y-3">
             <div class="flex items-center space-x-2">
                 <input
                     v-model="formData.title"
@@ -12,6 +12,14 @@
                 />
                 <button class="btn btn-primary" type="submit">Add</button>
             </div>
+            <div>
+                <textarea
+                    v-model="formData.description"
+                    class="input"
+                    placeholder="Add a description (optional)"
+                    rows="2"
+                ></textarea>
+            </div>
         </form>
 
         <!-- Todo List -->
@@ -19,28 +27,46 @@
             <li
                 v-for="todo in store.todos"
                 :key="todo.id"
-                class="card flex justify-between p-4"
+                class="card p-4 space-y-2"
             >
-                <div class="flex items-center">
-                    <input
-                        type="checkbox"
-                        class="h-4 w-4 text-primary-600"
-                        :checked="todo.completed"
-                        @change="() => toggle(todo)"
-                    />
-                    <div
-                        :class="{
-                            'line-through text-gray-500 dark:text-gray-400':
-                                todo.completed,
-                            'ml-3': true,
-                        }"
-                    >
-                        {{ todo.title }}
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <input
+                            type="checkbox"
+                            class="h-4 w-4 text-primary-600"
+                            :checked="todo.completed"
+                            @change="() => toggle(todo)"
+                        />
+                        <div
+                            :class="{
+                                'line-through text-gray-500 dark:text-gray-400':
+                                    todo.completed,
+                                'ml-3': true,
+                            }"
+                        >
+                            {{ todo.title }}
+                        </div>
                     </div>
+                    <button
+                        class="btn btn-danger"
+                        @click="() => remove(todo.id)"
+                    >
+                        Delete
+                    </button>
                 </div>
-                <button class="btn btn-danger" @click="() => remove(todo)">
-                    Delete
-                </button>
+
+                <!-- Description -->
+                <div
+                    v-if="todo.description"
+                    class="ml-7 text-sm text-gray-600 dark:text-gray-400"
+                >
+                    {{ todo.description }}
+                </div>
+
+                <!-- Created date -->
+                <div class="ml-7 text-xs text-gray-400">
+                    Created: {{ formatDate(todo.created_at) }}
+                </div>
             </li>
         </ul>
 
@@ -52,36 +78,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import { useTodoStore } from "@/stores/todoStore/todoStore";
 import type { Todo } from "@/types/todo";
+import { ref } from "vue";
 
 const store = useTodoStore();
-const formData = ref({ title: "" });
 
-onMounted(store.loadTodos);
+// Form data
+const formData = ref({
+    title: "",
+    description: "",
+});
 
-const handleCreate = async () => {
+// Create new todo
+function handleCreate() {
     if (!formData.value.title) return;
-    const create = await store.createTodo({
+    store.createTodo({
         title: formData.value.title,
+        description: formData.value.description || "",
     });
     formData.value.title = "";
-    console.log("create singolo: ", create);
-};
-
-const toggle = async (todo: Todo) => {
-    const update = await store.toggleTodo(todo.id);
-    console.log("update singolo: ", update);
-};
-
-const remove = async (todo: Todo) => {
-    await store.deleteTodo(todo.id);
-};
-</script>
-
-<style scoped>
-.line-through {
-    text-decoration: line-through;
+    formData.value.description = "";
 }
-</style>
+
+// Toggle completed
+function toggle(todo: Todo) {
+    store.updateTodo(todo.id, { completed: !todo.completed });
+}
+
+// Remove todo
+function remove(todoId: Todo["id"]) {
+    store.deleteTodo(todoId);
+}
+
+// Format date
+function formatDate(dateStr: string) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+}
+</script>

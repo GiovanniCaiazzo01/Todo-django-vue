@@ -8,13 +8,6 @@ export interface Todo {
   is_overdue: boolean;
 }
 
-export interface CreateTodoData {
-  title: string;
-  description?: string;
-}
+export type CreateTodoData = Pick<Todo, "title" | "description">;
 
-export interface UpdateTodoData {
-  title?: string;
-  description?: string;
-  completed?: boolean;
-}
+export type UpdateTodoData = Pick<Todo, "completed">;

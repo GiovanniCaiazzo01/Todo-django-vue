@@ -25,7 +25,7 @@ export class TodoService {
     return response.data;
   }
 
-  static async delete(id: number): Promise<void> {
+  static async delete(id: Todo["id"]): Promise<void> {
     await api.delete(`${this.ENDPOINT}${id}/`);
   }
 

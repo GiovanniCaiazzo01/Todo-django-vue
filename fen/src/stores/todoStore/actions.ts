@@ -1,6 +1,6 @@
 import { TodoService } from "@/services/todo/todoApi";
 import type { useTodoStore } from "./todoStore";
-import type { CreateTodoData, UpdateTodoData } from "@/types/todo";
+import type { Todo, CreateTodoData, UpdateTodoData } from "@/types/todo";
 
 async function loadTodos(this: ReturnType<typeof useTodoStore>) {
   try {
@@ -54,7 +54,10 @@ async function updateTodo(
   }
 }
 
-async function deleteTodo(this: ReturnType<typeof useTodoStore>, id: number) {
+async function deleteTodo(
+  this: ReturnType<typeof useTodoStore>,
+  id: Todo["id"],
+) {
   try {
     this.error = null;
     await TodoService.delete(id);

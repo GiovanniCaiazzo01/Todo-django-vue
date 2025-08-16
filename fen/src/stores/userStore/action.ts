@@ -7,10 +7,8 @@ async function userSignIn(
   data: Pick<User, "email" | "password">,
 ) {
   const { email, password } = data;
-  console.log("user action sign-in: ", { email, password });
   const { token, user } = await AuthService.signIn({ email, password });
   this.$patch({ user, token });
-  console.log(this);
   return { user, token };
 }
 

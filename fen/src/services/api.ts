@@ -25,7 +25,6 @@ api.interceptors.response.use(
     const url = error.config?.url;
     const isServerError =
       status >= 500 || statusText === "Internal Server Error";
-    console.log({ isServerError: status >= 500, status });
     if (isServerError) {
       correlationId =
         error.response?.headers?.["x-correlation-id"] ??

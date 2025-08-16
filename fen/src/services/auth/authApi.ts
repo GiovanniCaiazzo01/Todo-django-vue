@@ -7,7 +7,6 @@ export class AuthService {
 
   static async signUp(userData: User): Promise<AuthResponse> {
     const response = await api.post(`${this.ENDPOINT}/sign-up/`, userData);
-    console.log(response.data);
     return response.data;
   }
 

@@ -116,7 +116,6 @@ function toggle(todo: Pick<Todo, "id" | "completed">) {
 
 // Remove todo
 function remove(todoId: Todo["id"]) {
-    console.log(todoId);
     store.deleteTodo(todoId);
 }
 

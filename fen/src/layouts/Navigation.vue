@@ -56,17 +56,6 @@ import { Sun, Moon } from "lucide-vue-next";
 import { useTheme } from "@/composables/useTheme";
 import { RouterLink } from "vue-router";
 import { Navlinks } from "@/data/navigation";
-import { useUserStore } from "@/stores/userStore/userStore";
-const store = useUserStore();
-
-import { watchEffect } from "vue";
-
-watchEffect(() => {
-    console.log("[Navigation] store changed", {
-        token: store.token,
-        user: store.user,
-    });
-});
 
 interface NavigationProps {
     activeCount?: number;

@@ -333,7 +333,7 @@ const submit = handleSubmit(async (values) => {
             router.push(Navlinks.dashboard.route);
         }
     } catch (error: any) {
-        console.log(error);
+        console.error(error);
         const data = error?.response?.data;
         data?.username && setFieldError("username", data?.username[0]);
         data?.email && setFieldError("email", data?.email[0]);

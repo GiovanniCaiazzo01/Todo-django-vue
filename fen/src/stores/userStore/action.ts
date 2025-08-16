@@ -15,13 +15,9 @@ async function userSignIn(
 }
 
 async function userSignUp(this: ReturnType<typeof useUserStore>, data: User) {
-  try {
-    const { token, user } = await AuthService.signUp(data);
-    this.$patch({ user, token });
-    return { user, token };
-  } catch (error) {
-    console.error("Error during sing-up", error);
-  }
+  const { token, user } = await AuthService.signUp(data);
+  this.$patch({ user, token });
+  return { user, token };
 }
 
 export { userSignUp, userSignIn };

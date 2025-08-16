@@ -1,5 +1,6 @@
 import type { AuthResponse } from "@/types/auth";
 import api from "../api";
+import type { User } from "@/types/user";
 
 export class AuthService {
   private static readonly ENDPOINT = "/auth";

@@ -137,15 +137,16 @@
 import { ref } from "vue";
 import { Field, ErrorMessage, useForm } from "vee-validate";
 import { SignInFormType } from "./SignIn.schema";
-import { AuthService } from "@/services/auth/authApi";
 import type { SignInForm } from "./types";
 import { useRouter } from "vue-router";
 import { Navlinks } from "@/data/navigation";
+import { useUserStore } from "@/stores/userStore/userStore";
 
 const showPassword = ref(false);
 const submitSuccess = ref(false);
 const router = useRouter();
 
+const store = useUserStore();
 const { handleSubmit, isSubmitting, submitCount, errors, setFieldError } =
     useForm<SignInForm>({
         validationSchema: SignInFormType,
@@ -154,7 +155,7 @@ const { handleSubmit, isSubmitting, submitCount, errors, setFieldError } =
 const submit = handleSubmit(async (values) => {
     submitSuccess.value = false;
     try {
-        const result = await AuthService.signIn(values);
+        const result = await store.userSignIn(values);
         if (result?.token) {
             localStorage.setItem("authtoken", result.token);
             submitSuccess.value = true;

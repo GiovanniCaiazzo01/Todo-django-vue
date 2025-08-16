@@ -1,4 +1,3 @@
-export type SignInForm = {
-  email: string;
-  password: string;
-};
+import type { User } from "@/types/user";
+
+export type SignInForm = Pick<User, "email" | "password">;

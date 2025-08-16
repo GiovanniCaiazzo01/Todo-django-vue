@@ -308,14 +308,15 @@ import { ref } from "vue";
 import { Field, ErrorMessage, useForm } from "vee-validate";
 import { useRouter } from "vue-router";
 import { SignUpFormType } from "./SignUp.schema";
-import { AuthService } from "@/services/auth/authApi";
 import type { SignUpForm } from "./types";
 import { Navlinks } from "@/data/navigation";
+import { useUserStore } from "@/stores/userStore/userStore";
 
 const isSubmitSuccessful = ref(false);
 const showPassword = ref(false);
 const showConfirm = ref(false);
 const router = useRouter();
+const store = useUserStore();
 
 const { handleSubmit, isSubmitting, errors, setFieldError } =
     useForm<SignUpForm>({
@@ -325,8 +326,7 @@ const { handleSubmit, isSubmitting, errors, setFieldError } =
 const submit = handleSubmit(async (values) => {
     isSubmitSuccessful.value = false;
     try {
-        const result = await AuthService.signUp({ ...values });
-
+        const result = await store.userSignUp(values);
         if (result?.token) {
             localStorage.setItem("authtoken", result.token);
             isSubmitSuccessful.value = true;

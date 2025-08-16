@@ -1,9 +1,8 @@
+import type { AuthResponse } from "@/types/auth";
+import * as userAction from "./action";
 import { defineStore } from "pinia";
 
-type UseUserStore = {
-  user: Omit<User, "password">;
-  type: "member" | "guest";
-};
+type UseUserStore = AuthResponse;
 
 export const useUserStore = defineStore("user", {
   state: (): UseUserStore => ({
@@ -14,6 +13,11 @@ export const useUserStore = defineStore("user", {
       lastName: "",
       username: "",
     },
-    type: "member",
+    token: "",
   }),
+  getters: {
+    isAuth: (state) => !!state.token,
+  },
+  actions: { ...userAction },
+  persist: true,
 });

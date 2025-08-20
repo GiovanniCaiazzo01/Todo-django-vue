@@ -24,11 +24,7 @@
 
         <!-- Todo List -->
         <ul class="space-y-3">
-            <li
-                v-for="todo in store.todos"
-                :key="todo.id"
-                class="card p-4 space-y-2"
-            >
+            <li v-for="todo in todos" :key="todo.id" class="card p-4 space-y-2">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center">
                         <input
@@ -70,27 +66,35 @@
                 </div>
 
                 <!-- Created date -->
-                <div class="ml-7 text-xs text-gray-400">
+                <div v-if="todo.created_at" class="ml-7 text-xs text-gray-400">
                     Created: {{ formatDate(todo.created_at) }}
                 </div>
             </li>
         </ul>
 
         <!-- Loading spinner -->
-        <div v-if="store.isLoading" class="mt-4 flex justify-center">
+        <div v-if="isTodosLoading" class="mt-4 flex justify-center">
             <div class="loading w-6 h-6"></div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { useTodoStore } from "@/stores/todoStore/todoStore";
+import { useTodos } from "@/composables/useTodos";
 import type { Todo } from "@/types/todo";
 import { onMounted } from "vue";
 import { ref } from "vue";
 
-const store = useTodoStore();
-onMounted(store.loadTodos);
+const {
+    loadTodosTasks,
+    createTodoTask,
+    todos,
+    updateTodoTask,
+    deleteTodoTask,
+    isTodosLoading,
+} = useTodos();
+
+onMounted(loadTodosTasks);
 
 // Form data
 const formData = ref({
@@ -101,7 +105,8 @@ const formData = ref({
 // Create new todo
 function handleCreate() {
     if (!formData.value.title) return;
-    store.createTodo({
+
+    createTodoTask({
         title: formData.value.title,
         description: formData.value.description || "",
     });
@@ -111,12 +116,12 @@ function handleCreate() {
 
 // Toggle completed
 function toggle(todo: Pick<Todo, "id" | "completed">) {
-    store.updateTodo(todo.id, { completed: !todo.completed });
+    updateTodoTask(todo.id, { completed: !todo.completed });
 }
 
 // Remove todo
 function remove(todoId: Todo["id"]) {
-    store.deleteTodo(todoId);
+    deleteTodoTask(todoId);
 }
 
 // Format date

@@ -41,10 +41,6 @@
                     <RouterLink :to="{ name: Navlinks.signIn.name }">
                         {{ Navlinks.signIn.name }}
                     </RouterLink>
-
-                    <RouterLink :to="{ name: Navlinks.landingPage.name }">
-                        {{ Navlinks.landingPage.name }}
-                    </RouterLink>
                 </div>
             </div>
         </div>

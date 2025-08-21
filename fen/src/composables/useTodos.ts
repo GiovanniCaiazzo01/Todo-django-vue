@@ -20,6 +20,10 @@ export function useTodos() {
     () => todos.value.filter((todo) => todo.completed).length,
   );
 
+  const activeTodos = computed<number>(
+    () => todos.value.filter((todo) => !todo.completed).length,
+  );
+
   const totalTodos = computed<number>(() => todos.value.length);
 
   async function loadTodosTasks() {
@@ -55,6 +59,7 @@ export function useTodos() {
     return updatedTodos;
   }
   async function updateTodoTask(id: Todo["id"], data: UpdateTodoData) {
+    console.log({ id, data });
     if (userStore.isAuth) return await todoStore.updateTodo(id, data);
     return updateTodoGuest(id, data);
   }
@@ -105,5 +110,6 @@ export function useTodos() {
     isTodosLoading: todoStore.isLoading,
     completedTodos,
     totalTodos,
+    activeTodos,
   };
 }

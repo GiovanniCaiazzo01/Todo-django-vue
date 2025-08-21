@@ -44,6 +44,7 @@ async function updateTodo(
     if (index !== -1) {
       this.todos[index] = updatedTodo;
     }
+    console.log(updatedTodo);
     return updatedTodo;
   } catch (err: any) {
     this.error = "Failed to update todo";

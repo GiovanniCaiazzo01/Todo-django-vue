@@ -84,6 +84,7 @@ import { useTodos } from "@/composables/useTodos";
 import type { Todo } from "@/types/todo";
 import { onMounted } from "vue";
 import { ref } from "vue";
+import { formatDate } from "@/utils";
 
 const {
     loadTodosTasks,
@@ -95,6 +96,11 @@ const {
 } = useTodos();
 
 onMounted(loadTodosTasks);
+
+console.log(
+    "id:",
+    todos.value.map((t) => t.id),
+);
 
 // Form data
 const formData = ref({
@@ -122,11 +128,5 @@ function toggle(todo: Pick<Todo, "id" | "completed">) {
 // Remove todo
 function remove(todoId: Todo["id"]) {
     deleteTodoTask(todoId);
-}
-
-// Format date
-function formatDate(dateStr: string) {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
 }
 </script>

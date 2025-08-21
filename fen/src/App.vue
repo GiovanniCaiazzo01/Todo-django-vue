@@ -4,7 +4,7 @@
             <!-- Navigation -->
             <template v-if="isSlotVisible" #header>
                 <Navigation
-                    :active-count="todos.totalTodos.value"
+                    :active-count="todos.activeTodos.value"
                     :completed-count="todos.completedTodos.value"
                 />
             </template>

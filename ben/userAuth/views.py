@@ -1,10 +1,15 @@
+from rest_framework import viewsets, permissions
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from .serializers import SignInSerializer, SignUpSerializer, UserPublicSerializer
+from .serializers import SignInSerializer, SignUpSerializer, UserPublicSerializer, ProfileSerializer
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class SignUpView(CreateAPIView):
@@ -36,3 +41,26 @@ class SignInView(APIView):
             {"token": token.key, "user": UserPublicSerializer(user).data},
             status=status.HTTP_201_CREATED,
         )
+
+
+class LogoutView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            if request.auth:
+                request.auth.delete()
+            else:
+                Token.objects.filter(user=request.user).delete()
+        except Exception:
+            pass
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = ProfileSerializer

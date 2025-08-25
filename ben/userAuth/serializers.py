@@ -1,8 +1,9 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .validators import validate_strong_password
 
 
+User = get_user_model()
 BASE_USER_FIELDS = ["id", "username", "email", "firstName", "lastName"]
 
 
@@ -89,3 +90,8 @@ class SignInSerializer(serializers.Serializer):
 
         attrs["user"] = user
         return attrs
+
+
+class ProfileSerializer(UserPublicSerializer):
+    class Meta(UserPublicSerializer.Meta):
+      fields = BASE_USER_FIELDS

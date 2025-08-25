@@ -48,4 +48,4 @@ class TodoUpdateSerializer(TodoSerializer):
     title = serializers.CharField(max_length=200, required=False)
 
     class Meta(TodoSerializer.Meta):
-        fields = ["title", "description", "completed"]
+        fields = ["id","title", "description", "completed"]

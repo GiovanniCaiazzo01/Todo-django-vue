@@ -136,8 +136,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Field, ErrorMessage, useForm } from "vee-validate";
-import { SignInFormType } from "./SignIn.schema";
-import type { SignInForm } from "./types";
+import { SignInTypedSchema, type SignInFormType } from "./SignIn.schema";
 import { useRouter } from "vue-router";
 import { Navlinks } from "@/data/navigation";
 import { useUserStore } from "@/stores/userStore/userStore";
@@ -148,8 +147,8 @@ const router = useRouter();
 
 const store = useUserStore();
 const { handleSubmit, isSubmitting, submitCount, errors, setFieldError } =
-    useForm<SignInForm>({
-        validationSchema: SignInFormType,
+    useForm<SignInFormType>({
+        validationSchema: SignInTypedSchema,
     });
 
 const submit = handleSubmit(async (values) => {

@@ -29,6 +29,12 @@ const routes = [
     name: Navlinks.dashboard.name,
     component: () => import("@/pages/Dashboard/DashboardPage.vue"),
   },
+
+  {
+    path: Navlinks.profile.route,
+    name: Navlinks.profile.name,
+    component: () => import("@/pages/Profile/ProfilePage.vue"),
+  },
 ];
 
 export const router = createRouter({
@@ -38,7 +44,7 @@ export const router = createRouter({
 
 router.beforeEach((to) => {
   const userStore = useUserStore(pinia);
-  const protectedRoutes = [Navlinks.dashboard.name];
+  const protectedRoutes = [Navlinks.dashboard.name, Navlinks.profile.name];
 
   if (
     userStore.isAuth &&

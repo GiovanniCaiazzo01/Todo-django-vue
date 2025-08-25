@@ -1,11 +1,10 @@
 <template>
-    <!-- Attività recente (reale) -->
     <div class="card">
         <div class="card-header">
             <h2 class="text-lg font-medium">Attività recente</h2>
         </div>
         <div class="card-body text-sm">
-            <div v-if="isRecentLoading" class="flex justify-center">
+            <div v-if="isTodosLoading" class="flex justify-center">
                 <div class="loading w-6 h-6"></div>
             </div>
 
@@ -48,37 +47,32 @@
             >
                 Nessuna attività recente. Crea un nuovo todo!
             </p>
-
-            <div class="pt-2">
-                <RouterLink to="">
-                    <button class="btn btn-secondary w-full">Vedi tutti</button>
-                </RouterLink>
-            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { useTodos } from "@/composables/useTodos";
+import type { Todo } from "@/types/todo";
 import { formatDate } from "@/utils";
 import { computed } from "vue";
-const todoStore = useTodos();
+
+interface RecentActivitiesProps {
+    todos: Todo[];
+    isTodosLoading: boolean;
+}
+
+const props = withDefaults(defineProps<RecentActivitiesProps>(), {
+    todos: () => [],
+    isTodosLoading: false,
+});
 
 const recentTodos = computed(() => {
-    const arr = [...(todoStore.todos.value || [])];
-    // ordino per updated_at (se presente) altrimenti created_at
+    const arr = [...(props.todos || [])];
     arr.sort((a, b) => {
         const da = new Date(a.updated_at || a.created_at || 0).getTime();
         const db = new Date(b.updated_at || b.created_at || 0).getTime();
         return db - da;
     });
-    // solo gli ultimi 6
     return arr.slice(0, 6);
-});
-
-const isRecentLoading = computed(() => {
-    // se ho lo store con todos, non mostro loading
-    if (todoStore?.todos) return false;
-    return todoStore.isTodosLoading;
 });
 </script>

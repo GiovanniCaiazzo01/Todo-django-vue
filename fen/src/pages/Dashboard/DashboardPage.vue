@@ -18,7 +18,7 @@
         <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Actions />
             <Profile :username="userName" :first-name :last-name :email />
-            <RecentActivities />
+            <RecentActivities :todos :isTodosLoading />
         </section>
 
         <!-- TodoListForm integrato -->
@@ -54,7 +54,14 @@ import Actions from "./components/Actions.vue";
 import Profile from "./components/Profile.vue";
 import RecentActivities from "./components/RecentActivities.vue";
 
-const { loadTodosTasks, activeTodos, completedTodos, totalTodos } = useTodos();
+const {
+    loadTodosTasks,
+    activeTodos,
+    completedTodos,
+    totalTodos,
+    todos,
+    isTodosLoading,
+} = useTodos();
 
 const userStore = useUserStore();
 const { user, token } = storeToRefs(userStore);
@@ -74,7 +81,6 @@ const lastName = computed(() => {
 const email = computed(() => {
     return user.value.email;
 });
-
 const tokenShort = computed(() =>
     token.value ? `${token.value.slice(0, 8)}…${token.value.slice(-4)}` : "",
 );

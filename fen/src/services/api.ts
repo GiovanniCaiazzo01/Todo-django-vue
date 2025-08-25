@@ -1,4 +1,5 @@
 import { errorBus } from "@/lib/mitt/error-bus";
+import { useUserStore } from "@/stores/userStore/userStore";
 import axios from "axios";
 
 const api = axios.create({
@@ -10,8 +11,10 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("authtoken");
-  if (token) config.headers.Authorization = `Token ${token}`;
+  const userStore = useUserStore();
+  if (userStore.token) {
+    config.headers.Authorization = `Token ${userStore.token}`; // <-- DRF TokenAuthentication
+  }
   return config;
 });
 

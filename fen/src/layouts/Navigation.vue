@@ -7,11 +7,16 @@
                 <!-- Logo/Brand -->
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <h1
-                            class="text-xl font-bold text-gray-900 dark:text-white"
+                        <RouterLink
+                            :to="{ name: Navlinks.landingPage.name }"
+                            class="cursor-pointer"
                         >
-                            <span class="text-primary-600">Todo</span> App
-                        </h1>
+                            <h1
+                                class="text-xl font-bold text-gray-900 dark:text-white"
+                            >
+                                <span class="text-primary-600">Todo</span> App
+                            </h1>
+                        </RouterLink>
                     </div>
                 </div>
 
@@ -38,8 +43,8 @@
                         <Moon v-else class="w-5 h-5 text-gray-600" />
                     </button>
 
-                    <RouterLink :to="{ name: Navlinks.signIn.name }">
-                        {{ Navlinks.signIn.name }}
+                    <RouterLink :to="{ name: navigateTo }">
+                        {{ navigateLabel }}
                     </RouterLink>
                 </div>
             </div>
@@ -52,6 +57,10 @@ import { Sun, Moon } from "lucide-vue-next";
 import { useTheme } from "@/composables/useTheme";
 import { RouterLink } from "vue-router";
 import { Navlinks } from "@/data/navigation";
+import { useUserStore } from "@/stores/userStore/userStore";
+import { toRefs } from "vue";
+const userStore = useUserStore();
+const { isAuth } = toRefs(userStore);
 
 interface NavigationProps {
     activeCount?: number;
@@ -64,4 +73,8 @@ withDefaults(defineProps<NavigationProps>(), {
 });
 
 const { theme, toggleTheme } = useTheme();
+const navigateTo = isAuth ? Navlinks.profile.name : Navlinks.landingPage.name;
+const navigateLabel = isAuth
+    ? Navlinks.profile.name
+    : Navlinks.landingPage.name;
 </script>

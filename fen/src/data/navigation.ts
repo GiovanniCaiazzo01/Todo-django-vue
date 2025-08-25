@@ -3,6 +3,7 @@ export const Navlinks = {
     route: "/",
     name: "Landing page",
   },
+
   signIn: {
     route: "sign-in",
     name: "Sign in",
@@ -14,5 +15,9 @@ export const Navlinks = {
   dashboard: {
     route: "/dashboard",
     name: "Dashboard",
+  },
+  profile: {
+    route: "/profile",
+    name: "Profile",
   },
 };

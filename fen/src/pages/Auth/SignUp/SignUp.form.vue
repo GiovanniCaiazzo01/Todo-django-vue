@@ -307,8 +307,7 @@
 import { ref } from "vue";
 import { Field, ErrorMessage, useForm } from "vee-validate";
 import { useRouter } from "vue-router";
-import { SignUpFormType } from "./SignUp.schema";
-import type { SignUpForm } from "./types";
+import { SignUpTypedSchema, type SignUpFormType } from "./SignUp.schema";
 import { Navlinks } from "@/data/navigation";
 import { useUserStore } from "@/stores/userStore/userStore";
 
@@ -319,8 +318,8 @@ const router = useRouter();
 const store = useUserStore();
 
 const { handleSubmit, isSubmitting, errors, setFieldError } =
-    useForm<SignUpForm>({
-        validationSchema: SignUpFormType,
+    useForm<SignUpFormType>({
+        validationSchema: SignUpTypedSchema,
     });
 
 const submit = handleSubmit(async (values) => {

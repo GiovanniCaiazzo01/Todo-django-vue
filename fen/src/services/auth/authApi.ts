@@ -5,7 +5,7 @@ import type { User } from "@/types/user";
 export class AuthService {
   private static readonly ENDPOINT = "/auth";
 
-  static async signUp(userData: User): Promise<AuthResponse> {
+  static async signUp(userData: Omit<User, "id">): Promise<AuthResponse> {
     const response = await api.post(`${this.ENDPOINT}/sign-up/`, userData);
     return response.data;
   }
@@ -18,6 +18,11 @@ export class AuthService {
       password: userData.password,
     });
 
+    return respose.data;
+  }
+
+  static async logOut(): Promise<number> {
+    const respose = await api.post(`${this.ENDPOINT}/log-out/`);
     return respose.data;
   }
 }

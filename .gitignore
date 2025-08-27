@@ -15,7 +15,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -210,7 +209,6 @@ dist
 
 # Gatsby files
 .cache/
-public
 
 # vue-cli service worker
 sw.*

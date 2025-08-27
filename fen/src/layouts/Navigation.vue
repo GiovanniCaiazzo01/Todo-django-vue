@@ -85,8 +85,8 @@ const { theme, toggleTheme } = useTheme();
 // Link principale
 const navigateTo = userStore.isAuth
     ? Navlinks.profile.name
-    : Navlinks.landingPage.name;
+    : Navlinks.signIn.name;
 const navigateLabel = userStore.isAuth
     ? Navlinks.profile.name
-    : Navlinks.landingPage.name;
+    : Navlinks.signIn.name;
 </script>

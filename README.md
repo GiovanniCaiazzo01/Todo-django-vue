@@ -172,7 +172,6 @@ export interface UpdateTodoRequest {
 - **Compile-time Safety**: Catches errors before runtime
 - **IDE Support**: Better autocomplete and refactoring
 - **Documentation**: Types serve as living documentation
-- **API Contract**: Ensures frontend-backend data consistency
 
 ### 2. API Service (`frontend/src/services/api.ts`)
 

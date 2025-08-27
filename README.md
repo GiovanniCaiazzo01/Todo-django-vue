@@ -12,7 +12,7 @@
 ---
 
 ## 🎯 Project Overview
-
+<a name="project-overview"/>
 This Todo application demonstrates full-stack development expertise using:
 
 * **Backend**: Django REST Framework with custom serializers and viewsets
@@ -33,7 +33,7 @@ This Todo application demonstrates full-stack development expertise using:
 ---
 
 ## 🔧 Backend Deep Dive - Django REST Framework
-
+<a name="backend-deep-dive---django-rest-framework"/>
 ### 1. Models (`backend/todos/models.py`)
 
 ```python
@@ -52,9 +52,7 @@ class Todo(models.Model):
     def __str__(self):
         return self.title
 ```
-
 ### 2. Serializers (`backend/todos/serializers.py`)
-
 ```python
 from rest_framework import serializers
 from .models import Todo
@@ -142,7 +140,7 @@ urlpatterns = [
 ## 🎨 Frontend Deep Dive - Vue.js 3
 
 ### 1. Type Definitions (`frontend/src/types/index.ts`)
-
+<a name="frontend-deep-dive---vuejs-3"/>
 ```typescript
 export interface Todo {
   id: number;
@@ -411,7 +409,7 @@ onMounted(() => {
 ---
 
 ## 🚀 Getting Started
-
+<a name="getting-started"/>
 ### Backend (Django + DRF)
 
 Prerequisiti: **Python 3.10+** e `pip`.
@@ -462,7 +460,7 @@ Il frontend usa `src/services/api.ts` con base URL `http://localhost:8000/api`.
 ---
 
 ## 🏗️ Code Architecture Patterns
-
+<a name="code-architecture-patterns"/>
 ### 1. Repository Pattern (API Service)
 
 ```typescript
@@ -510,7 +508,7 @@ router.register(r'todos', TodoViewSet)
 ---
 
 ## ⚡ Performance Considerations
-
+<a name="performance-considerations"/>
 ### Backend Optimizations
 
 1. **Database Indexing**: Add indexes on frequently queried fields

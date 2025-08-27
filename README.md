@@ -5,8 +5,9 @@
 1. [Project Overview](#project-overview)
 2. [Backend Deep Dive - Django REST Framework](#backend-deep-dive---django-rest-framework)
 3. [Frontend Deep Dive - Vue.js 3](#frontend-deep-dive---vuejs-3)
-4. [Code Architecture Patterns](#code-architecture-patterns)
-5. [Performance Considerations](#performance-considerations)
+4. [Getting Started](#getting-started)
+5. [Code Architecture Patterns](#code-architecture-patterns)
+6. [Performance Considerations](#performance-considerations)
 
 ---
 
@@ -164,7 +165,6 @@ export interface UpdateTodoRequest {
 }
 ```
 
-
 ### 2. API Service (`frontend/src/services/api.ts`)
 
 ```typescript
@@ -200,7 +200,7 @@ export const todoAPI = {
 ### 3. Global State Management (`frontend/src/stores/todoStore.ts`)
 
 ```typescript
-import { ref, computed } from 'vue';
+import { ref, computed, readonly } from 'vue';
 import { todoAPI } from '../services/api';
 import type { Todo, CreateTodoRequest, UpdateTodoRequest } from '../types';
 
@@ -298,14 +298,6 @@ export const useTodoStore = () => {
   };
 };
 ```
-
-**State Management Pattern:**
-
-* **Singleton Pattern**: Single source of truth
-* **Reactive State**: Vue's ref() for reactivity
-* **Computed Properties**: Derived state with caching
-* **Error Handling**: Centralized error management
-* **Readonly Exports**: Prevents external mutation
 
 ### 4. Component Implementation (`frontend/src/App.vue`)
 
@@ -416,13 +408,56 @@ onMounted(() => {
 </script>
 ```
 
-**Component Architecture Highlights:**
+---
 
-* **Composition API**: `<script setup>` syntax
-* **Reactive Forms**: Two-way binding with v-model
-* **Error Handling**: User-friendly error display
-* **Loading States**: Disabled buttons during operations
-* **Responsive**: Mobile-first design with Tailwind CSS
+## 🚀 Getting Started
+
+### Backend (Django + DRF)
+
+Prerequisiti: **Python 3.10+** e `pip`.
+
+```bash
+# entra nella cartella backend
+cd backend
+
+# crea ed attiva il virtualenv
+python -m venv .venv
+# macOS/Linux
+source .venv/bin/activate
+# Windows (PowerShell)
+# .venv\Scripts\Activate.ps1
+
+# installa le dipendenze
+pip install -r requirements.txt
+
+# migrazioni (+ opzionale superuser)
+python manage.py migrate
+# python manage.py createsuperuser
+
+# avvia il server
+python manage.py runserver 0.0.0.0:8000
+```
+
+L’API sarà disponibile su `http://localhost:8000/api/`.
+
+### Frontend (Vue 3 + Vite)
+
+Prerequisiti: **Node.js 18+** e npm/pnpm/yarn.
+
+```bash
+# entra nella cartella frontend
+cd frontend
+
+# installa le dipendenze
+npm install
+# oppure: pnpm install / yarn
+
+# avvia il dev server
+npm run dev
+# Vite espone di default su http://localhost:5173
+```
+
+Il frontend usa `src/services/api.ts` con base URL `http://localhost:8000/api`.
 
 ---
 
@@ -498,5 +533,3 @@ router.register(r'todos', TodoViewSet)
 4. **Request Batching**: Combine multiple API calls when possible
 
 ---
-
-This documentation provides a comprehensive foundation for discussing your Django REST Framework and Vue.js 3 expertise in technical interviews. Focus on understanding the "why" behind each decision, not just the "how" of implementation.

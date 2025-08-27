@@ -6,7 +6,7 @@
         </div>
         <div class="card-body">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <RouterLink to="">
+                <RouterLink :to="{ name: Navlinks.profile.name }">
                     <button class="btn btn-secondary">Impostazioni</button>
                 </RouterLink>
 
@@ -24,4 +24,5 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import { emitterAuth } from "@/lib/mitt/user";
+import { Navlinks } from "@/data/navigation";
 </script>

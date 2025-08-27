@@ -50,7 +50,7 @@
 
                     <!-- Dashboard solo se loggato -->
                     <RouterLink
-                        v-if="isAuth"
+                        v-if="userStore.isAuth"
                         :to="{ name: Navlinks.dashboard.name }"
                     >
                         Dashboard
@@ -67,10 +67,8 @@ import { useTheme } from "@/composables/useTheme";
 import { RouterLink } from "vue-router";
 import { Navlinks } from "@/data/navigation";
 import { useUserStore } from "@/stores/userStore/userStore";
-import { toRefs } from "vue";
 
 const userStore = useUserStore();
-const { isAuth } = toRefs(userStore);
 
 interface NavigationProps {
     activeCount?: number;
@@ -85,6 +83,10 @@ withDefaults(defineProps<NavigationProps>(), {
 const { theme, toggleTheme } = useTheme();
 
 // Link principale
-const navigateTo = isAuth ? Navlinks.profile.name : Navlinks.landingPage.name;
-const navigateLabel = isAuth ? Navlinks.profile.name : Navlinks.landingPage.name; 
+const navigateTo = userStore.isAuth
+    ? Navlinks.profile.name
+    : Navlinks.landingPage.name;
+const navigateLabel = userStore.isAuth
+    ? Navlinks.profile.name
+    : Navlinks.landingPage.name;
 </script>

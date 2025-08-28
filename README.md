@@ -11,7 +11,7 @@
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 This Todo application demonstrates full-stack development expertise using:
 
